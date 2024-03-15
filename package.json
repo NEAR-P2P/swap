@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./src/app.ts",
     "build": "rm -rf dist/* && tsc",
-    "start": "node ./dist/src/app.js",
+    "start": "node ./dist/app.js",
     "production": "export NODE_ENV=production && node ./dist/src/app.js",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js -d ./src/config/data.source.ts",
     "create": "typeorm migration:create ./src/migrations/migration",
