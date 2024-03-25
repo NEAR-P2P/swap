@@ -116,27 +116,26 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
       nearTransactions.push(tx);
     }
 
-    if (tokenOut.includes('wrap.')) {
-      nearTransactions.push({
-        receiverId: `wrap.${NEAR}`,
-        functionCalls: [
-          {
-            methodName: 'near_withdraw',
-            args: { amount: String(Math.floor(Number(minAmountOut) * 10 ** tokensMetadata[tokenOut].decimals)) },
-            minAmountOut: minAmountOut,
-            gas: '300000000000000',
-            amount: '1',
-          },
-        ],
-      });
-    }
-
     let secondNum;
     if (tokenOut === `wrap.${NEAR}`) {
       secondNum = minAmountOut;
       minAmountOut = utils.format.parseNearAmount(String(minAmountOut));
     } else {
       secondNum = minAmountOut / Math.pow(10, Number(tokensMetadata[tokenOut].decimals));
+    }
+
+    if (tokenOut.includes('wrap.')) {
+      nearTransactions.push({
+        receiverId: `wrap.${NEAR}`,
+        functionCalls: [
+          {
+            methodName: 'near_withdraw',
+            args: { amount: minAmountOut },
+            gas: '300000000000000',
+            amount: '1',
+          },
+        ],
+      });
     }
 
     const firstNum = Number(amountIn) / Math.pow(10, Number(tokensMetadata[tokenIn].decimals));
