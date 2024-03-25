@@ -124,13 +124,19 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
       secondNum = minAmountOut / Math.pow(10, Number(tokensMetadata[tokenOut].decimals));
     }
 
+    const firstNum = Number(amountIn) / Math.pow(10, Number(tokensMetadata[tokenIn].decimals));
+
+    const swapRate = String(secondNum / firstNum);
+
+    const amountOut = String(minAmountOut);
+
     if (tokenOut.includes('wrap.')) {
       nearTransactions.push({
         receiverId: `wrap.${NEAR}`,
         functionCalls: [
           {
             methodName: 'near_withdraw',
-            args: { amount: String(minAmountOut) },
+            args: { amount: amountOut },
             gas: '300000000000000',
             amount: '1',
           },
@@ -138,15 +144,11 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
       });
     }
 
-    const firstNum = Number(amountIn) / Math.pow(10, Number(tokensMetadata[tokenIn].decimals));
-
-    const swapRate = String(secondNum / firstNum);
-
     const dataSwap = {
       exchange: 'Ref Finance',
       fromAmount: amountIn,
       fromDecimals: tokensMetadata[tokenIn].decimals,
-      toAmount: String(minAmountOut),
+      toAmount: amountOut,
       toDecimals: tokensMetadata[tokenOut].decimals,
       swapRate,
       contract: tokenIn,
