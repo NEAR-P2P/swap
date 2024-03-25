@@ -115,4 +115,44 @@ function getMinAmountOut(trxSwap: any, tokenOut: string) {
   }
 }
 
+function getMinAmountOutNear(trxSwap: any, tokenOut: string) {
+  const NEAR = process.env.NETWORK === 'mainnet' ? 'near' : 'testnet';
+
+  const transaction = trxSwap.find(
+    (element: {
+      functionCalls: {
+        methodName: string;
+      }[];
+    }) => element.functionCalls[0].methodName === 'ft_transfer_call',
+  );
+
+  if (!transaction) return false;
+
+  const argsMsg = JSON.parse(transaction.functionCalls[0].args.msg);
+
+  console.log(argsMsg);
+
+  if (Object.keys(argsMsg).includes('actions')) {
+    let minAmountOut = 0;
+    for (const action of argsMsg.actions) {
+      if (action.token_out === tokenOut) {
+        if (action.token_out === `wrap.${NEAR}`) {
+          minAmountOut += Number(utils.format.formatNearAmount(action.min_amount_out));
+        } else {
+          console.log(Number(action.min_amount_out));
+          minAmountOut += Number(action.min_amount_out);
+        }
+      }
+    }
+    return minAmountOut;
+  } else if (Object.keys(argsMsg).includes('Swap')) {
+    if (tokenOut === `wrap.${NEAR}`) {
+      return Number(utils.format.formatNearAmount(argsMsg.Swap.min_output_amount));
+    }
+    return Number(argsMsg.Swap.min_output_amount);
+  } else {
+    return 0;
+  }
+}
+
 export default { getTxSwapRef, getTxSwapDCL, getMinAmountOut };
