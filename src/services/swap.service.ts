@@ -122,7 +122,8 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
         functionCalls: [
           {
             methodName: 'near_withdraw',
-            args: { amount: String(Number(minAmountOut) * 10 ** tokensMetadata[tokenOut].decimals) },
+            args: { amount: String(Math.floor(Number(minAmountOut) * 10 ** tokensMetadata[tokenOut].decimals)) },
+            minAmountOut: minAmountOut,
             gas: '300000000000000',
             amount: '1',
           },
