@@ -29,24 +29,29 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
 
     const tokensMetadata = await ftGetTokensMetadata([tokenIn, tokenOut]);
 
-    console.log('AQUI VA 0');
+    const [transactionsRef, transactionsDcl] = await Promise.all([
+      swapUtils.getTxSwapRef(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount, address),
+      swapUtils.getTxSwapDCL(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount),
+    ]);
 
-    const transactionsRef = await swapUtils.getTxSwapRef(
-      tokensMetadata[tokenIn],
-      tokensMetadata[tokenOut],
-      amount,
-      address,
-    );
+    // console.log('AQUI VA 0');
 
-    console.log('AQUI VA 4');
+    // const transactionsRef = await swapUtils.getTxSwapRef(
+    //   tokensMetadata[tokenIn],
+    //   tokensMetadata[tokenOut],
+    //   amount,
+    //   address,
+    // );
 
-    const transactionsDcl = await swapUtils.getTxSwapDCL(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount);
+    // console.log('AQUI VA 4');
+
+    // const transactionsDcl = await swapUtils.getTxSwapDCL(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount);
 
     const minAmountRef = await swapUtils.getMinAmountOut(transactionsRef, tokenOut);
 
     let minAmountDcl: any;
 
-    console.log('AQUI VA');
+    // console.log('AQUI VA');
 
     if (process.env.NETWORK === 'mainnet') {
       minAmountDcl = await swapUtils.getMinAmountOut(transactionsDcl, tokenOut);
@@ -54,7 +59,7 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
       minAmountDcl = 0;
     }
 
-    console.log(minAmountRef, minAmountDcl);
+    // console.log(minAmountRef, minAmountDcl);
 
     let minAmountOut: any = 0;
 
@@ -63,7 +68,7 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
 
     if (!txMain || !minAmountOut) return;
 
-    console.log('AQUI VA 2');
+    // console.log('AQUI VA 2');
 
     const transaction = txMain.find(
       (element: { functionCalls: { methodName: string }[] }) =>

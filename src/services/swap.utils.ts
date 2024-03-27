@@ -13,14 +13,14 @@ import {
 import nearService from './near.service';
 
 async function getTxSwapRef(tokenMetadataA: any, tokenMetadataB: any, amount: number, address: string) {
-  console.log('GET 1');
+  // console.log('GET 1');
   const { ratedPools, unRatedPools, simplePools } = await fetchAllPools();
 
   const stablePools: Pool[] = unRatedPools.concat(ratedPools);
 
   const stablePoolsDetail: StablePool[] = await getStablePools(stablePools);
 
-  console.log('GET 2');
+  // console.log('GET 2');
 
   const options: SwapOptions = {
     enableSmartRouting: true,
@@ -36,7 +36,7 @@ async function getTxSwapRef(tokenMetadataA: any, tokenMetadataB: any, amount: nu
     options,
   });
 
-  console.log('GET 3');
+  // console.log('GET 3');
 
   const transactionsRef = await instantSwap({
     tokenIn: tokenMetadataA,
@@ -47,7 +47,7 @@ async function getTxSwapRef(tokenMetadataA: any, tokenMetadataB: any, amount: nu
     AccountId: address,
   });
 
-  console.log('GET 4');
+  // console.log('GET 4');
 
   return transactionsRef;
 }
