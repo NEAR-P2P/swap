@@ -20,7 +20,7 @@ import BN from 'bn.js';
 
 const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: string, amount: number) => {
   try {
-    console.log('ENTRO');
+    // console.log('ENTRO');
 
     const NEAR = process.env.NETWORK === 'mainnet' ? 'near' : 'testnet';
 
