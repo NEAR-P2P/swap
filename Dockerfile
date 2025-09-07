@@ -19,14 +19,6 @@ RUN npm run build
 # Etapa de producción
 FROM node:22-alpine
 
-ARG PORT
-ARG NETWORK
-ARG NEAR_ENV
-
-ENV PORT=${PORT}
-ENV NETWORK=${NETWORK}
-ENV NEAR_ENV=${NEAR_ENV}
-
 # Directorio de trabajo en la imagen de producción
 WORKDIR /app
 
@@ -42,7 +34,7 @@ COPY --from=builder /app/dist ./dist
 # USER appuser
 
 # Exponer el puerto en el que la aplicación se ejecutará
-EXPOSE ${PORT}
+EXPOSE 3000
 
 # Ejecutar la aplicación
 CMD ["node", "./dist/main.js"]
