@@ -1,0 +1,43 @@
+services:
+  nearp2p-swap:
+    image: metademocracia1/nearp2p-swap:latest
+    container_name: nearp2p-swap
+    restart: always
+    env_file: ".env.production"
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - .env.production:/app/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+  npm:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: always
+    ports:
+      - "80:80"
+      - "81:81" # NPM admin panel
+      - "443:443"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - app-network
+
+  watchtower-nearp2p-swap:
+    image: containrrr/watchtower
+    container_name: watchtower-latest
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=30
+    networks:
+      - app-network
+
+networks:
+  app-network:

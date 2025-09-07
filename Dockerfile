@@ -37,4 +37,4 @@ COPY --from=builder /app/dist ./dist
 EXPOSE 3000
 
 # Ejecutar la aplicación
-CMD ["node", "./dist/main.js"]
+CMD ["node", "./dist/app.js"]
