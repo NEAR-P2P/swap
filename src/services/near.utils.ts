@@ -17,7 +17,7 @@ const ConfigNEAR = (keyStores: any) => {
     case 'mainnet':
       return {
         networkId: 'mainnet',
-        nodeUrl: 'https://rpc.mainnet.near.org',
+        nodeUrl: 'https://free.rpc.fastnear.com',
         keyStore: keyStores,
         walletUrl: 'https://wallet.near.org',
         helperUrl: 'https://helper.mainnet.near.org',
