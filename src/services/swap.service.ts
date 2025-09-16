@@ -23,16 +23,20 @@ const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: str
     // console.log('ENTRO');
 
     const NEAR = process.env.NETWORK === 'mainnet' ? 'near' : 'testnet';
+    console.log(process.env.NETWORK === 'mainnet' ? 'near' : 'testnet')
+    console.log(process.env.NETWORK);
 
     const tokenIn = tokenInAux === 'near' ? `wrap.${NEAR}` : tokenInAux;
     const tokenOut = tokenOutAux === 'near' ? `wrap.${NEAR}` : tokenOutAux;
 
     const tokensMetadata = await ftGetTokensMetadata([tokenIn, tokenOut]);
+    console.log(tokensMetadata);
 
     const [transactionsRef, transactionsDcl] = await Promise.all([
       swapUtils.getTxSwapRef(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount, address),
       swapUtils.getTxSwapDCL(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount),
     ]);
+    console.log('Hasta aqui ok')
 
     // console.log('AQUI VA 0');
 
