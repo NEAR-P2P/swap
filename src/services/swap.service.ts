@@ -1,3 +1,10 @@
+import dotenv from 'dotenv';
+dotenv.config(); // Make sure this is at the very top
+
+import { init_env } from '@ref-finance/ref-sdk';
+
+
+
 import { KeyPair, utils } from 'near-api-js';
 import { Account, keyStores, Near } from 'near-api-js';
 import nearUtils, { AccountService } from './near.utils';
@@ -18,25 +25,34 @@ import nearService from './near.service';
 import swapUtils from './swap.utils';
 import BN from 'bn.js';
 
+// Initialize the Ref Finance SDK environment based on your .env file
+// This function configures the network and sets the RPC node for the entire SDK.
+const rpcUrl = process.env.NEAR_ENV === 'mainnet' 
+  ? 'https://free.rpc.fastnear.com' 
+  : 'https://rpc.testnet.near.org';
+
+const env = process.env.NEAR_ENV
+init_env(process.env.NEAR_ENV || 'testnet', undefined, rpcUrl);
+
 const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: string, amount: number) => {
   try {
     // console.log('ENTRO');
 
     const NEAR = process.env.NETWORK === 'mainnet' ? 'near' : 'testnet';
-    console.log(process.env.NETWORK === 'mainnet' ? 'near' : 'testnet')
-    console.log(process.env.NETWORK);
+    // console.log(process.env.NETWORK === 'mainnet' ? 'near' : 'testnet')
+    // console.log(process.env.NETWORK);
 
     const tokenIn = tokenInAux === 'near' ? `wrap.${NEAR}` : tokenInAux;
     const tokenOut = tokenOutAux === 'near' ? `wrap.${NEAR}` : tokenOutAux;
 
     const tokensMetadata = await ftGetTokensMetadata([tokenIn, tokenOut]);
-    console.log(tokensMetadata);
+    // console.log(tokensMetadata);
 
     const [transactionsRef, transactionsDcl] = await Promise.all([
       swapUtils.getTxSwapRef(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount, address),
       swapUtils.getTxSwapDCL(tokensMetadata[tokenIn], tokensMetadata[tokenOut], amount),
     ]);
-    console.log('Hasta aqui ok')
+    // console.log('Hasta aqui ok')
 
     // console.log('AQUI VA 0');
 
