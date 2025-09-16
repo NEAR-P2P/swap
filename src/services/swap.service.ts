@@ -3,7 +3,14 @@ dotenv.config(); // Make sure this is at the very top
 
 import { init_env } from '@ref-finance/ref-sdk';
 
+// Initialize the Ref Finance SDK environment based on your .env file
+// This function configures the network and sets the RPC node for the entire SDK.
+const rpcUrl = process.env.NEAR_ENV === 'mainnet' 
+  ? 'https://free.rpc.fastnear.com' 
+  : 'https://rpc.testnet.near.org';
 
+const env = process.env.NEAR_ENV
+init_env(process.env.NEAR_ENV || 'testnet', undefined, rpcUrl);
 
 import { KeyPair, utils } from 'near-api-js';
 import { Account, keyStores, Near } from 'near-api-js';
@@ -25,14 +32,7 @@ import nearService from './near.service';
 import swapUtils from './swap.utils';
 import BN from 'bn.js';
 
-// Initialize the Ref Finance SDK environment based on your .env file
-// This function configures the network and sets the RPC node for the entire SDK.
-const rpcUrl = process.env.NEAR_ENV === 'mainnet' 
-  ? 'https://free.rpc.fastnear.com' 
-  : 'https://rpc.testnet.near.org';
 
-const env = process.env.NEAR_ENV
-init_env(process.env.NEAR_ENV || 'testnet', undefined, rpcUrl);
 
 const previewSwap = async (tokenInAux: string, tokenOutAux: string, address: string, amount: number) => {
   try {

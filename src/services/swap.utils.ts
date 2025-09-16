@@ -12,6 +12,18 @@ import {
 } from '@ref-finance/ref-sdk';
 import nearService from './near.service';
 
+
+import { init_env } from '@ref-finance/ref-sdk';
+
+// Initialize the Ref Finance SDK environment based on your .env file
+// This function configures the network and sets the RPC node for the entire SDK.
+const rpcUrl = process.env.NEAR_ENV === 'mainnet' 
+  ? 'https://free.rpc.fastnear.com' 
+  : 'https://rpc.testnet.near.org';
+
+const env = process.env.NEAR_ENV
+init_env(process.env.NEAR_ENV || 'testnet', undefined, rpcUrl);
+
 async function getTxSwapRef(tokenMetadataA: any, tokenMetadataB: any, amount: number, address: string) {
   // console.log('GET 1');
   const { ratedPools, unRatedPools, simplePools } = await fetchAllPools();
